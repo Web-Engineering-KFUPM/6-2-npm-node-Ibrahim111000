@@ -77,7 +77,11 @@ Example:
   import { add, subtract } from "./utils/operations.js";
   import { parseNumbers, isValidOperation } from "./utils/parser.js";
   import _ from "lodash";
-
+*/
+import { add, subtract, multiply, divide } from "./utils/operations.js";
+import { parseNumbers, isValidOperation } from "./utils/parser.js";
+import _ from "lodash";
+/*
 ===================================================================
 TODO 2: Parse Command Line Arguments (in calculator.js)
 ===================================================================
@@ -94,7 +98,10 @@ Hints:
 Example:
   const operation = process.argv[2];
   const numbers = process.argv.slice(3);
-
+*/
+const operation = process.argv[2];
+const numbers = process.argv.slice(3);
+/*
 ===================================================================
 TODO 3: Validate Input and Calculate (in calculator.js)
 ===================================================================
@@ -123,7 +130,35 @@ Example structure:
   }
 
   console.log(`Result: ${result}`);
+*/
+if (!isValidOperation(operation)) {
+  console.log("Invalid operation. Use: add, subtract, multiply, or divide");
+  return;
+}
 
+const nums = parseNumbers(numbers);
+let result;
+
+switch (operation) {
+  case "add":
+    result = add(nums);
+    break;
+  case "subtract":
+    result = subtract(nums);
+    break;
+  case "multiply":
+    result = multiply(nums);
+    break;
+  case "divide":
+    result = divide(nums);
+    break;
+  default:
+    console.log("Unknown operation");
+    return;
+}
+
+console.log(`Result: ${result}`);
+/*
 ===============================================================
 TODO 4: Create Math Operation Functions (in utils/operations.js)
 ===============================================================
@@ -154,7 +189,28 @@ Example for add:
   export function add(numbers) {
     return numbers.reduce((sum, num) => sum + num, 0);
   }
+*/
+export function add(numbers) {
+  return numbers.reduce((sum, num) => sum + num, 0);
+}
 
+export function subtract(numbers) {
+  return numbers.slice(1).reduce((result, num) => result - num, numbers[0]);
+}
+
+export function multiply(numbers) {
+  return numbers.reduce((product, num) => product * num, 1);
+}
+
+export function divide(numbers) {
+  return numbers.slice(1).reduce((result, num) => {
+    if (num === 0) {
+      return null;
+    }
+    return result / num;
+  }, numbers[0]);
+}
+/*
 ===============================================================
 TODO 5: Create Parser Functions Using Lodash (in utils/parser.js)
 ===============================================================
@@ -175,7 +231,14 @@ Example:
     const numbers = _.map(input, (str) => Number(str));
     return _.compact(numbers);
   }
+*/
+import _ from "lodash";
 
+export function parseNumbers(input) {
+  const numbers = _.map(input, (str) => Number(str));
+  return _.compact(numbers);
+}
+/*
 TODO 5.2: Validate Operation Function
 - Check if the operation is one of: "add", "subtract", "multiply", "divide"
 - Use lodash's _.includes() to check if the operation is in the valid operations array
@@ -189,7 +252,14 @@ Example:
     const validOps = ["add", "subtract", "multiply", "divide"];
     return _.includes(validOps, operation);
   }
+*/
+import _ from "lodash";
 
+export function isValidOperation(operation) {
+  const validOps = ["add", "subtract", "multiply", "divide"];
+  return _.includes(validOps, operation);
+}
+/*
 ===============================================================
 Testing Your Calculator
 ===============================================================
@@ -212,4 +282,3 @@ After completing all TODOs, test your calculator:
   Expected output: Invalid operation. Use: add, subtract, multiply, or divide
 
 */
-
